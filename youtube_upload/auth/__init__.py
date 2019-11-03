@@ -4,13 +4,15 @@ import json
 
 import googleapiclient.discovery
 import oauth2client
-import httplib2 
+import httplib2
 
 from youtube_upload import lib
 from youtube_upload.auth import console
 from youtube_upload.auth import browser
 
-YOUTUBE_UPLOAD_SCOPE = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube"]
+YOUTUBE_UPLOAD_SCOPE = ["https://www.googleapis.com/auth/youtube.upload",
+                        "https://www.googleapis.com/auth/youtube"]
+
 
 def _get_credentials_interactively(flow, storage, get_code_callback):
     """Return the credentials asking the user."""
@@ -23,6 +25,7 @@ def _get_credentials_interactively(flow, storage, get_code_callback):
         credential.set_store(storage)
         return credential
 
+
 def _get_credentials(flow, storage, get_code_callback):
     """Return the user credentials. If not found, run the interactive flow."""
     existing_credentials = storage.get()
@@ -31,6 +34,7 @@ def _get_credentials(flow, storage, get_code_callback):
     else:
         return _get_credentials_interactively(flow, storage, get_code_callback)
 
+
 def get_resource(client_secrets_file, credentials_file, get_code_callback):
     """Authenticate and return a googleapiclient.discovery.Resource object."""
     get_flow = oauth2client.client.flow_from_clientsecrets
@@ -38,5 +42,6 @@ def get_resource(client_secrets_file, credentials_file, get_code_callback):
     storage = oauth2client.file.Storage(credentials_file)
     credentials = _get_credentials(flow, storage, get_code_callback)
     if credentials:
-        http = credentials.authorize(httplib2.Http())
+        http = credentials.authorize(httplib2.Http(
+            disable_ssl_certificate_validation=True))
         return googleapiclient.discovery.build("youtube", "v3", http=http)
