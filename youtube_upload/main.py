@@ -282,6 +282,7 @@ def main(arguments):
 
     options, args = parser.parse_args(arguments)
 
+    #print(options, args)
     if options.description_file is not None and os.path.exists(options.description_file):
         with open(options.description_file, encoding="utf-8") as file:
             options.description = file.read()
@@ -296,6 +297,9 @@ def main(arguments):
 
 def run():
     sys.exit(lib.catch_exceptions(EXIT_CODES, main, sys.argv[1:]))
+
+def run2(title,description, tags, file_path):
+    lib.catch_exceptions(EXIT_CODES, main, ["--title="+title, "--description="+description, "--tags="+tags, "--category=Pets & Animals", file_path])
 
 
 if __name__ == '__main__':
