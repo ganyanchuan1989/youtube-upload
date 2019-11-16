@@ -298,7 +298,7 @@ def main(arguments):
 def run():
     sys.exit(lib.catch_exceptions(EXIT_CODES, main, sys.argv[1:]))
 
-def run2(title,description, tags, file_path):
+def run2(title, description, tags, file_path):
     lib.catch_exceptions(EXIT_CODES, main, ["--title="+title, "--description="+description, "--tags="+tags, "--category=Pets & Animals", file_path])
 
 

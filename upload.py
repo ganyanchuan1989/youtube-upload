@@ -11,6 +11,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(
     os.path.realpath(__file__)), os.pardir))
 os.environ["https_proxy"] = "https://127.0.0.1:1080"  # 增加代理
 
+BASE_PATH ="C:/workspace/py/amemv-crawler/download"
+
 class UploadWorker(Thread):
     def __init__(self, queue):
         Thread.__init__(self)
@@ -18,33 +20,41 @@ class UploadWorker(Thread):
 
     def run(self):
         while True:
-            read = self.queue.get()
-            main.run2("test", "this is desc", "xx, bb, oo", "C:/1.mp4")
+            user = self.queue.get()
+            uploadVideo(user)
             self.queue.task_done()
 
+def uploadVideo(user):
+    v_path = "%s\\%s\\%s\\%s.mp4" % (BASE_PATH, user.tags, user.user_id, user.v_uri )
+    main.run2(user.desc, user.desc, user.tags, v_path)
+    q = (ComUser.update(isupload = True).where(ComUser.user_id == user.user_id & ComUser.v_uri == user.v_uri))
+    q.execute()
 
 if __name__ == "__main__":
     content = []
     data = getData()
+    queue = queue.Queue()
+
     user_id_list = []
     for item in data:
         user_id_list.append(item["user_id"])
 
-    query = ComUser.select().where(ComUser.user_id << ("109638574452t", "109638574452"))
-    for x in query:
-        print(x)
- 
-    # queue = queue.Queue()
-    # for num in range(1, 100):
-    #     content.append({"num": num})
-    #     queue.put(num)
+    query = ComUser.select().where((ComUser.user_id << user_id_list) & ComUser.isupload == False)
+    for user in query:
+        queue.put(user)
 
-    # print(queue.qsize)
+    if(queue.empty()):
+        print('no need upload')
+    
+    else: 
+        # 10 Thread 
+        for i in range(1, 11):
+            w = UploadWorker(queue)
+            w.daemon = True
+            w.start()
 
-    # for i in range(1, 11):
-    #     w = UploadWorker(queue)
-    #     w.daemon = True
-    #     w.start()
+        queue.join()
 
-    # queue.join()
-    # print("finish all task")
+        print("Upload All Video Done")
+
+    
