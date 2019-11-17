@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(
     os.path.realpath(__file__)), os.pardir))
 os.environ["https_proxy"] = "https://127.0.0.1:1080"  # 增加代理
 
-BASE_PATH ="C:/workspace/py/amemv-crawler/download"
+BASE_PATH ="E:/amemv-crawler/download"
 
 class UploadWorker(Thread):
     def __init__(self, queue):
@@ -42,6 +42,7 @@ if __name__ == "__main__":
     query = ComUser.select().where((ComUser.user_id << user_id_list) & ComUser.isupload == False)
     for user in query:
         queue.put(user)
+        break
 
     if(queue.empty()):
         print('no need upload')
