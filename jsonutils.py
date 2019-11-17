@@ -3,7 +3,7 @@ import codecs
 
 
 def getData():
-    with open("./share-url.json", 'r') as load_f:
+    with codecs.open("./share-url.json", 'r', "utf-8") as load_f:
         data_dict = json.load(load_f)
         return data_dict
     return {}

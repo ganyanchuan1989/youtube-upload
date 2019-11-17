@@ -34,16 +34,22 @@ def uploadVideo(user):
 
 if __name__ == "__main__":
     content = []
+    urlnamemap = {}
     data = getData()
     queue = queue.Queue()
 
     user_url_list = []
     for item in data:
-        user_url_list.append(item["user_url"])
-
+        user_url_list.append(item["url"])
+        urlnamemap[item["url"]] = item["name"]
+        
     query = ComUser.select().where((ComUser.user_url << user_url_list) & ComUser.isupload == False)
     for user in query:
-        queue.put(user)
+        name = urlnamemap[user.user_url]
+        user.tags += " ," +  name
+        user.desc = PREFIX + "【" + name +"】" + user.desc
+        print(user)
+        # queue.put(user)
         break
 
     if(queue.empty()):
