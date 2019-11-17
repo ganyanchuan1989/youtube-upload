@@ -12,6 +12,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(
 os.environ["https_proxy"] = "https://127.0.0.1:1080"  # 增加代理
 
 BASE_PATH ="E:/amemv-crawler/download"
+PREFIX = "【抖音】【转载】"
 
 class UploadWorker(Thread):
     def __init__(self, queue):
@@ -35,11 +36,11 @@ if __name__ == "__main__":
     data = getData()
     queue = queue.Queue()
 
-    user_id_list = []
+    user_url_list = []
     for item in data:
-        user_id_list.append(item["user_id"])
+        user_url_list.append(item["user_url"])
 
-    query = ComUser.select().where((ComUser.user_id << user_id_list) & ComUser.isupload == False)
+    query = ComUser.select().where((ComUser.user_url << user_url_list) & ComUser.isupload == False)
     for user in query:
         queue.put(user)
         break
