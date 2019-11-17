@@ -34,18 +34,16 @@ def uploadVideo(user):
 
 if __name__ == "__main__":
     content = []
-    urlnamemap = {}
     data = getData()
     queue = queue.Queue()
 
     user_url_list = []
     for item in data:
         user_url_list.append(item["url"])
-        urlnamemap[item["url"]] = item["name"]
         
-    query = ComUser.select().where((ComUser.user_url << user_url_list) & ComUser.isupload == False)
+    query = ComUser.select().where((ComUser.user_url << user_url_list) & ComUser.isupload == False & ComUser.v_size != 0)
     for user in query:
-        name = urlnamemap[user.user_url]
+        name = user.user_name
         user.tags += " ," +  name
         user.desc = PREFIX + "【" + name +"】" + user.desc
         print(user)
