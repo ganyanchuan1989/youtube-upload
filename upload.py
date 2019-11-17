@@ -13,6 +13,7 @@ os.environ["https_proxy"] = "https://127.0.0.1:1080"  # 增加代理
 
 BASE_PATH ="E:/amemv-crawler/download"
 PREFIX = "【抖音】【转载】"
+category = "Entertainment" # 娱乐
 
 class UploadWorker(Thread):
     def __init__(self, queue):
@@ -27,7 +28,7 @@ class UploadWorker(Thread):
 
 def uploadVideo(user):
     v_path = "%s\\%s\\%s\\%s.mp4" % (BASE_PATH, user.tags, user.user_id, user.v_uri )
-    main.run2(user.desc, user.desc, user.tags, v_path)
+    main.run2(user.desc, user.desc, user.tags, v_path, category)
     q = (ComUser.update(isupload = True).where(ComUser.user_id == user.user_id & ComUser.v_uri == user.v_uri))
     q.execute()
 
