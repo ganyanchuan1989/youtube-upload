@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(
     os.path.realpath(__file__)), os.pardir))
 os.environ["https_proxy"] = "https://127.0.0.1:1080"  # 增加代理
 
-BASE_PATH ="E:/amemv-crawler/download"
+BASE_PATH ="C:/workspace/py/amemv-crawler/download"
 PREFIX = "【抖音】【转载】"
 category = "Pets & Animals" # 娱乐
 
