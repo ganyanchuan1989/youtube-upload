@@ -13,7 +13,7 @@ os.environ["https_proxy"] = "https://127.0.0.1:1080"  # 增加代理
 
 BASE_PATH ="E:/amemv-crawler/download"
 PREFIX = "【抖音】【转载】"
-category = "Entertainment" # 娱乐
+category = "Pets & Animals" # 娱乐
 
 class UploadWorker(Thread):
     def __init__(self, queue):
