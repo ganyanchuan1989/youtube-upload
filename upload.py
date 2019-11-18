@@ -59,19 +59,23 @@ if __name__ == "__main__":
         name = user.user_name
         user.desc = PREFIX + "【" + name + "】" + user.desc
         # print(user)
-        queue.put(user)
-        break
+        # queue.put(user)
+        try:
+            uploadVideo(user)
+        except e:
+            print(e)
+            break
 
-    if(queue.empty()):
-        print('no need upload')
+    # if(queue.empty()):
+    #     print('no need upload')
 
-    else:
-        # 10 Thread
-        for i in range(1, 11):
-            w = UploadWorker(queue)
-            w.daemon = True
-            w.start()
+    # else:
+    #     # 10 Thread
+    #     for i in range(1, 11):
+    #         w = UploadWorker(queue)
+    #         w.daemon = True
+    #         w.start()
 
-        queue.join()
+    #     queue.join()
 
-        print("Upload All Video Done")
+    #     print("Upload All Video Done")
